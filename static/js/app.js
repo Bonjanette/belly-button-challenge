@@ -9,6 +9,7 @@ d3.json(url).then(function (data) {
   createBarChart("940");
   createBubbleChart("940");
   listMetadata("940");
+  washGuage("940");
 });
 
 function generateOptions() {
@@ -25,6 +26,7 @@ function optionChanged(selectedDataset) {
   createBarChart(selectedDataset);
   createBubbleChart(selectedDataset);
   listMetadata(selectedDataset);
+  washGuage(selectedDataset);
 }
 
 function createBarChart(selectedDataset) {
@@ -90,6 +92,9 @@ function createBubbleChart(selectedDataset) {
   let bubbleLayout = {
     title: "",
     showlegend: false,
+    xaxis: {
+      title: "OTU ID",
+    },
   };
   Plotly.newPlot("bubble", bubbleData, bubbleLayout);
 }
@@ -103,4 +108,39 @@ function listMetadata(selectedDataset) {
     .html(`id: ${chosenMetadata.id}<br>ethnicity: ${chosenMetadata.ethnicity}<br>
   gender: ${chosenMetadata.gender}<br> age: ${chosenMetadata.age}<br>
   location: ${chosenMetadata.location}<br>bbtype: ${chosenMetadata.bbtype}<br>wfreq: ${chosenMetadata.wfreq}`);
+}
+function washGuage(selectedDataset) {
+  let metadata = BBdata.metadata;
+  let chosenMetadata = metadata.find(function (metadata) {
+    return metadata.id === parseInt(selectedDataset);
+  });
+  let pointerValue = chosenMetadata.wfreq;
+  let angle = (pointerValue / 9) * 180;
+  let guageData = [
+    {
+      domain: { x: [0, 1], y: [0, 1] },
+      value: chosenMetadata.wfreq,
+      title: {
+        text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week",
+        mode: "html"
+      },
+      type: "indicator",
+      mode: "gauge+number",
+      gauge: {
+        axis: { range: [0, 9] },
+        shape: "path",
+        path: "M 0.5 0.1 L 0.4 0.9 L 0.6 0.9 Z",
+        fillcolor: 'black',
+        line: { color: "black" },
+        xaxis: 'x',
+        yaxis: 'y',
+        sizex: 0.2,
+        sizey: 0.2,
+        sizing: 'scaled',
+        transform: `rotate(${angle})`
+      }
+    },
+  ];
+  let guageLayout = { width: 600, height: 500, margin: { t: 0, b: 0 } };
+  Plotly.newPlot("gauge", guageData, guageLayout);
 }
