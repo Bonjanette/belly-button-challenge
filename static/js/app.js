@@ -8,6 +8,7 @@ d3.json(url).then(function (data) {
   generateOptions();
   createBarChart("940");
   createBubbleChart("940");
+  listMetadata("940");
 });
 
 function generateOptions() {
@@ -23,6 +24,7 @@ function generateOptions() {
 function optionChanged(selectedDataset) {
   createBarChart(selectedDataset);
   createBubbleChart(selectedDataset);
+  listMetadata(selectedDataset);
 }
 
 function createBarChart(selectedDataset) {
@@ -58,7 +60,6 @@ function createBarChart(selectedDataset) {
     title: "Operational Taxonomic Units<br> AKA Microbes Found",
   };
   Plotly.newPlot("bar", traceData, layout);
-  console.log(barVals, labels, hoverText);
 }
 
 function createBubbleChart(selectedDataset) {
@@ -66,7 +67,9 @@ function createBubbleChart(selectedDataset) {
   let chosenSample = samples.find(function (sample) {
     return sample.id === selectedDataset;
   });
-  let colorScale = d3.scaleLinear().domain([d3.min(chosenSample.otu_ids), d3.max(chosenSample.otu_ids)])
+  let colorScale = d3
+    .scaleLinear()
+    .domain([d3.min(chosenSample.otu_ids), d3.max(chosenSample.otu_ids)])
     .range(["blue", "yellow"]);
 
   let bubbleTrace = {
@@ -79,8 +82,8 @@ function createBubbleChart(selectedDataset) {
         return colorScale(id);
       }),
       size: chosenSample.sample_values,
-      sizeref: .1,
-      sizemode: "area"
+      sizeref: 0.1,
+      sizemode: "area",
     },
   };
   let bubbleData = [bubbleTrace];
@@ -89,4 +92,15 @@ function createBubbleChart(selectedDataset) {
     showlegend: false,
   };
   Plotly.newPlot("bubble", bubbleData, bubbleLayout);
+}
+function listMetadata(selectedDataset) {
+  let metadata = BBdata.metadata;
+  let chosenMetadata = metadata.find(function (metadata) {
+    return metadata.id === parseInt(selectedDataset);
+  });
+  console.log(chosenMetadata);
+  d3.select("#sample-metadata")
+    .html(`id: ${chosenMetadata.id}<br>ethnicity: ${chosenMetadata.ethnicity}<br>
+  gender: ${chosenMetadata.gender}<br> age: ${chosenMetadata.age}<br>
+  location: ${chosenMetadata.location}<br>bbtype: ${chosenMetadata.bbtype}<br>wfreq: ${chosenMetadata.wfreq}`);
 }
