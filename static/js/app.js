@@ -53,7 +53,7 @@ function createBarChart(selectedDataset) {
     y: ylabels,
     text: hoverText,
     name: "Bar",
-    marker: {color: "brown"},
+    marker: { color: "brown" },
     type: "bar",
     orientation: "h",
   };
@@ -72,7 +72,11 @@ function createBubbleChart(selectedDataset) {
   });
   let colorScale = d3
     .scaleLinear()
-    .domain([d3.min(chosenSample.otu_ids), d3.median(chosenSample.otu_ids), d3.max(chosenSample.otu_ids)])
+    .domain([
+      d3.min(chosenSample.otu_ids),
+      d3.median(chosenSample.otu_ids),
+      d3.max(chosenSample.otu_ids),
+    ])
     .range(["brown", "yellow", "#337AB7"]);
 
   let bubbleTrace = {
