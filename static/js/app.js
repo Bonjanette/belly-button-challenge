@@ -53,6 +53,7 @@ function createBarChart(selectedDataset) {
     y: ylabels,
     text: hoverText,
     name: "Bar",
+    marker: {color: "brown"},
     type: "bar",
     orientation: "h",
   };
@@ -71,8 +72,8 @@ function createBubbleChart(selectedDataset) {
   });
   let colorScale = d3
     .scaleLinear()
-    .domain([d3.min(chosenSample.otu_ids), d3.max(chosenSample.otu_ids)])
-    .range(["blue", "yellow"]);
+    .domain([d3.min(chosenSample.otu_ids), d3.median(chosenSample.otu_ids), d3.max(chosenSample.otu_ids)])
+    .range(["brown", "yellow", "#337AB7"]);
 
   let bubbleTrace = {
     x: chosenSample.otu_ids,
@@ -122,7 +123,7 @@ function washGuage(selectedDataset) {
       value: chosenMetadata.wfreq,
       title: {
         text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week",
-        mode: "html"
+        mode: "html",
       },
       type: "indicator",
       mode: "gauge+number",
@@ -130,17 +131,17 @@ function washGuage(selectedDataset) {
         axis: { range: [0, 9] },
         shape: "path",
         path: "M 0.5 0.1 L 0.4 0.9 L 0.6 0.9 Z",
-        fillcolor: 'black',
+        fillcolor: "black",
         line: { color: "black" },
-        xaxis: 'x',
-        yaxis: 'y',
+        xaxis: "x",
+        yaxis: "y",
         sizex: 0.2,
         sizey: 0.2,
-        sizing: 'scaled',
-        transform: `rotate(${angle})`
-      }
+        sizing: "scaled",
+        transform: `rotate(${angle})`,
+      },
     },
   ];
-  let guageLayout = { width: 600, height: 500, margin: { t: 0, b: 0 } };
+  let guageLayout = { width: 500, height: 400, margin: { t: 0, b: 0 } };
   Plotly.newPlot("gauge", guageData, guageLayout);
 }
