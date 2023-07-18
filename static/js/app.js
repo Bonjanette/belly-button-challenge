@@ -44,7 +44,7 @@ function createBarChart(selectedDataset) {
   let ylabels = [];
 
   for (let i = 0; i < 10; i++) {
-    ylabels.push(`OTU ${labels[i]}`);
+    ylabels.push(`OTU ${labels[i]} `);
   }
   let hoverText = otuLabels.slice(0, 10);
 
@@ -53,14 +53,14 @@ function createBarChart(selectedDataset) {
     y: ylabels,
     text: hoverText,
     name: "Bar",
-    marker: { color: "brown" },
+    marker: { color: "brown", opacity: .75 },
     type: "bar",
     orientation: "h",
   };
   let traceData = [barTrace];
 
   let layout = {
-    title: "Operational Taxonomic Units<br> AKA Microbes Found",
+    title: "<b>Operational Taxonomic Units</b><br>(AKA Microbes Found)",
   };
   Plotly.newPlot("bar", traceData, layout);
 }
@@ -95,7 +95,7 @@ function createBubbleChart(selectedDataset) {
   };
   let bubbleData = [bubbleTrace];
   let bubbleLayout = {
-    title: "",
+    title: "<b>Microbe found by Amount</b>",
     showlegend: false,
     xaxis: {
       title: "OTU ID",
@@ -133,6 +133,18 @@ function washGuage(selectedDataset) {
       mode: "gauge+number",
       gauge: {
         axis: { range: [0, 9] },
+        bar: { color: "brown" },
+        steps: [
+          { range: [0, 1], color: "red", opacity: 0.5 },
+          { range: [1, 2], color: "orange", opacity: 0.5 },
+          { range: [2, 3], color: "yellow", opacity: 0.5 },
+          { range: [3, 4], color: "green", opacity: 0.5 },
+          { range: [4, 5], color: "lime", opacity: 0.5 },
+          { range: [5, 6], color: "blue", opacity: 0.5 },
+          { range: [6, 7], color: "indigo", opacity: 0.5 },
+          { range: [7, 8], color: "purple", opacity: 0.5 },
+          { range: [8, 9], color: "black", opacity: 0.5 }
+        ],
         shape: "path",
         path: "M 0.5 0.1 L 0.4 0.9 L 0.6 0.9 Z",
         fillcolor: "black",
@@ -146,6 +158,6 @@ function washGuage(selectedDataset) {
       },
     },
   ];
-  let guageLayout = { width: 500, height: 400, margin: { t: 0, b: 0 } };
+  let guageLayout = { width: 470, height: 500, margin: { t: 0, b: 0 } };
   Plotly.newPlot("gauge", guageData, guageLayout);
 }
